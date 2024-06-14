@@ -1,7 +1,11 @@
 import axios from "axios";
 
-const login = axios.create({
-  baseURL: "http://localhost:5173",
+const api = axios.create({
+  baseURL: "http://localhost:5513",
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-export { login };
+export const login = async (data: { email: string; password: string }) =>
+  await api.post("/api/users/login", data);

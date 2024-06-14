@@ -9,17 +9,29 @@ import {
 import { Button } from "@/components/ui/button";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "@/http/api";
 
 const LoginPage = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+
+  // Mutations
+  const mutation = useMutation({
+    mutationFn: login,
+    onSuccess: () => {
+      navigate("/dashboard/home");
+    },
+  });
 
   const handleLogin = () => {
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
-    console.log("data", { email, password });
+    if (!email || !password) return alert("Email and Password required");
+    mutation.mutate({ email, password });
   };
 
   return (
